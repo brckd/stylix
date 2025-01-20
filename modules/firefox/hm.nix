@@ -21,9 +21,11 @@ let
           cfg = config.stylix.targets.${target.path};
           programCfg = config.programs.${target.path};
         in
-        lib.mkIf cfg.enable (mkCfg {
-          inherit target cfg programCfg;
-        })
+        lib.mkIf cfg.enable (
+          lib.optionalAttrs (config.programs ? ${target.path}) (mkCfg {
+            inherit target cfg programCfg;
+          })
+        )
       ) targets
     );
 in
